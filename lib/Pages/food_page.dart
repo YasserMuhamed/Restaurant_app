@@ -6,7 +6,9 @@ class FoodPage extends StatefulWidget {
   final Foods food;
   final Map<Addon, bool> selectedAddon = {};
 
-  FoodPage({super.key, required this.food}) {
+  FoodPage({super.key, required this.food})
+  // initialize first value of checkbox to false
+  {
     for (Addon addon in food.availableAddon) {
       selectedAddon[addon] = false;
     }
@@ -88,20 +90,20 @@ class _FoodPageState extends State<FoodPage> {
                             itemCount: widget.food.availableAddon.length,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
-                              final addons = widget.food.availableAddon[index];
+                              final addon = widget.food.availableAddon[index];
                               return CheckboxListTile(
-                                  title: Text(addons.name),
+                                  title: Text(addon.name),
                                   subtitle: Text(
-                                    "\$${addons.price}",
+                                    "\$${addon.price}",
                                     style: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
                                             .primary),
                                   ),
-                                  value: widget.selectedAddon[addons],
+                                  value: widget.selectedAddon[addon],
                                   onChanged: (bool? value) {
                                     setState(() {
-                                      widget.selectedAddon[addons] = value!;
+                                      widget.selectedAddon[addon] = value!;
                                     });
                                   });
                             }),
