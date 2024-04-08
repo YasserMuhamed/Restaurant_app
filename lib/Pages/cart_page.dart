@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:resturant_app/Pages/payment_page.dart';
 import 'package:resturant_app/components/cart_tile.dart';
 import 'package:resturant_app/components/custom_button.dart';
 import 'package:resturant_app/models/restaurant_model.dart';
@@ -107,11 +108,20 @@ class CartPage extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 25, right: 25, bottom: 16, top: 16),
-              child: CustomButton(text: "CheckOut", onTap: () {}),
-            )
+            restaurant.cart.isNotEmpty
+                ? Padding(
+                    padding: const EdgeInsets.only(
+                        left: 25, right: 25, bottom: 16, top: 16),
+                    child: CustomButton(
+                        text: "CheckOut",
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const PaymentPage()));
+                        }),
+                  )
+                : Container()
           ],
         ),
       );
