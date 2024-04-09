@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:resturant_app/models/cart_item.dart';
 import 'package:resturant_app/models/food_model.dart';
 
@@ -15,7 +16,7 @@ class Restaurant extends ChangeNotifier {
       description: "a classic burger with onion and beef bacon",
       foodCategory: FoodCategory.Burgers,
       availableAddon: [
-        Addon(name: "Extra cheese", price: .99),
+        Addon(name: "Extra cheese", price: 1.99),
         Addon(name: "Bacon", price: .99),
         Addon(name: "Sauce", price: .99)
       ],
@@ -344,6 +345,7 @@ class Restaurant extends ChangeNotifier {
   // add to cart
 
   void addToCart(Foods food, List<Addon> selectedAddons) {
+    //The first element satisfying test, or null if there are none.
     CartItem? cartItem = _cart.firstWhereOrNull((item) {
       // check if the food items are the same
       bool isSameFood = item.food == food;
@@ -411,6 +413,50 @@ class Restaurant extends ChangeNotifier {
   /*
 
    Helpers
-  
+
    */
+
+  // generate receipt
+
+  String displayCartReceipt() {
+    final receipt = StringBuffer();
+    receipt.writeln("Here's Your receipt.");
+    receipt.writeln();
+
+    String formattedDate =
+        DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+    receipt.writeln(formattedDate);
+    receipt.writeln();
+    receipt.writeln("-----------");
+
+    for (final cartItem in _cart) {
+      receipt.writeln(
+          "${cartItem.quantity} x ${cartItem.food.name} - ${_formatPrice(cartItem.food.price)}");
+
+      if (cartItem.selectedAddon.isNotEmpty) {
+        receipt.writeln("    Add-ons ${_formatAddon(cartItem.selectedAddon)}");
+      }
+
+      receipt.writeln();
+    }
+    receipt.writeln("-----------");
+    receipt.writeln();
+    receipt.writeln("Total items ${getTotalItemCount()}");
+    receipt.writeln("Total price ${_formatPrice(getTotalPrice())}");
+
+    return receipt.toString();
+  }
+
+  // Format Price to string
+  String _formatPrice(double price) {
+    return "\$ ${price.toStringAsFixed(2)}";
+  }
+
+  // format list of addons into a string summary
+
+  String _formatAddon(List<Addon> addons) {
+    return addons
+        .map((addon) => "${addon.name} ${_formatPrice(addon.price)}")
+        .join(", ");
+  }
 }

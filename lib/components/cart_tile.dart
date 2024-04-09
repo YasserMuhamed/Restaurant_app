@@ -36,8 +36,12 @@ class CartTile extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(cartItem.food.name),
-                    // ignore: prefer_interpolation_to_compose_strings
+                    SizedBox(
+                      width: 130,
+                      child: Text(
+                        cartItem.food.name,
+                      ),
+                    ),
                     Text(
                       "\$" +
                           (cartItem.food.price * cartItem.quantity)
